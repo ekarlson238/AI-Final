@@ -1147,10 +1147,10 @@ MonoBehaviour:
   maxMinX: 15
   maxMinZ: 15
   wander: 0
-  minimumDistToAvoid: 5
+  minimumDistToAvoid: 2.5
   mass: 5
   force: 25
-  dodgingTime: 0.5
+  dodgingTime: 0.3
   targetMarker: {fileID: 1846512226}
 --- !u!1 &1358715485
 GameObject:
