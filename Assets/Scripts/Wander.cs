@@ -5,7 +5,6 @@ public class Wander : MonoBehaviour
     private Vector3 tarPos;
     [SerializeField]
     private float movementSpeed = 5.0f;
-    [SerializeField]
     private float rotSpeed = 2.0f;
     [SerializeField]
     private float maxMinX, maxMinZ;
@@ -18,7 +17,7 @@ public class Wander : MonoBehaviour
     public float force = 50.0f;
     private float curSpeed;
 
-    [SerializeField][Tooltip("How long the agent will take when dodging before again moving towards the target")]
+    //[Tooltip("How long the agent will take when dodging before again moving towards the target")]
     private float dodgingTime = 0.2f;
     private float dodgeTime = 0;
 
@@ -35,6 +34,8 @@ public class Wander : MonoBehaviour
         maxZ = maxMinZ;
 
         wander = true;
+
+        SetRotateSpeedAndDodgeTimeFromSpeed();
 
         GetNextPosition();
     }
@@ -100,5 +101,11 @@ public class Wander : MonoBehaviour
 
             dodgeTime = dodgingTime;
         }
+    }
+
+    public void SetRotateSpeedAndDodgeTimeFromSpeed()
+    {
+        rotSpeed = movementSpeed * 2 / 5;
+        dodgingTime = 1 / movementSpeed;
     }
 }

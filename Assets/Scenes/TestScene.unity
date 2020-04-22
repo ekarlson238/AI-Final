@@ -127,6 +127,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6685324275422372164, guid: 3652f60b77745584482207dbf7990adf,
+        type: 3}
+      propertyPath: movementSpeed
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6685324276657295584, guid: 3652f60b77745584482207dbf7990adf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1715,6 +1720,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6685324275422372164, guid: 3652f60b77745584482207dbf7990adf,
+        type: 3}
+      propertyPath: rotSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6685324275422372164, guid: 3652f60b77745584482207dbf7990adf,
+        type: 3}
+      propertyPath: dodgingTime
+      value: 0.15
+      objectReference: {fileID: 0}
     - target: {fileID: 6685324276657295584, guid: 3652f60b77745584482207dbf7990adf,
         type: 3}
       propertyPath: m_LocalPosition.x
