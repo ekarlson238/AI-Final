@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum State { Wandering, GettingFood }
+public enum State { Wandering, GettingFood, Paused }
 
 public class AgentState : MonoBehaviour
 {

@@ -3,15 +3,13 @@ using System.Collections;
 public class Wander : MonoBehaviour
 {
     private Vector3 tarPos;
-    [SerializeField]
-    private float movementSpeed = 5.0f;
+    public float movementSpeed = 5.0f;
     private float rotSpeed = 2.0f;
     [SerializeField]
     private float maxMinX, maxMinZ;
     private float minX, maxX, minZ, maxZ;
 
     public float minimumDistToAvoid = 5.0f;
-    public float mass = 5.0f;
     public float force = 50.0f;
     private float curSpeed;
 
