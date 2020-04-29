@@ -9,8 +9,6 @@ public class Wander : MonoBehaviour
     [SerializeField]
     private float maxMinX, maxMinZ;
     private float minX, maxX, minZ, maxZ;
-    [HideInInspector]
-    public bool wander;
 
     public float minimumDistToAvoid = 5.0f;
     public float mass = 5.0f;
@@ -26,14 +24,16 @@ public class Wander : MonoBehaviour
     [SerializeField]
     private GameObject targetMarker;
 
+    private AgentState myAgentState;
+
     void Start()
     {
+        myAgentState = this.GetComponent<AgentState>();
+
         minX = -maxMinX;
         maxX = maxMinX;
         minZ = -maxMinZ;
         maxZ = maxMinZ;
-
-        wander = true;
 
         SetRotateSpeedAndDodgeTimeFromSpeed();
 
@@ -42,14 +42,14 @@ public class Wander : MonoBehaviour
 
     void Update()
     {
-        if (wander)
+        if (myAgentState.myState == State.Wandering)
         {
             RandomlyWander();
-        }
 
-        if (dodgeTime > 0)
-        {
-            dodgeTime -= Time.deltaTime;
+            if (dodgeTime > 0)
+            {
+                dodgeTime -= Time.deltaTime;
+            }
         }
     }
 
