@@ -25,8 +25,16 @@ public class GetFood : MonoBehaviour
     [SerializeField]
     private float EatingPauseTime = 2.0f;
 
+    private FoodManager foodManager;
+
+    private bool hasEaten;
+
     void Start()
     {
+        hasEaten = false;
+
+        foodManager = GameObject.FindObjectOfType<FoodManager>();
+
         myWander = this.GetComponent<Wander>();
         myAgentState = this.GetComponent<AgentState>();
 
@@ -39,6 +47,10 @@ public class GetFood : MonoBehaviour
 
     void Update()
     {
+        //if (targetFood == null || targetFood.activeSelf == false)
+        //{
+        //    GoBackToWandering();
+        //}
         if (myAgentState.myState == State.GettingFood)
         {
             GettingFood();
@@ -52,11 +64,12 @@ public class GetFood : MonoBehaviour
 
     private void GettingFood()
     {
-        if (Vector3.Distance(targetFood.transform.position, transform.position) <= 1.0f) //keep these 2 magic numbers equal
+        if (Vector3.Distance(targetFood.transform.position, transform.position) <= 1.0f && !hasEaten) //keep these 2 magic numbers equal
         {
+            hasEaten = true;
             Debug.Log("Target Achieved");
             targetFood.SetActive(false);
-            StartCoroutine(Pause(EatingPauseTime));
+            StartCoroutine(Pause(EatingPauseTime, targetFood));
         }
 
         if (dodgeTime <= 0)
@@ -79,6 +92,7 @@ public class GetFood : MonoBehaviour
     void GoBackToWandering()
     {
         myAgentState.myState = State.Wandering;
+        hasEaten = false;
     }
 
     public void AvoidObstacles(ref Vector3 dir)
@@ -106,10 +120,10 @@ public class GetFood : MonoBehaviour
         dodgingTime = 1 / movementSpeed;
     }
 
-    IEnumerator Pause(float waitTime)
+    IEnumerator Pause(float waitTime, GameObject food)
     {
         yield return new WaitForSeconds(waitTime);
         GoBackToWandering();
-        Destroy(targetFood);
+        foodManager.SpawnNewCarrot(food);
     }
 }
