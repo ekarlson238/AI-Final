@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum State { Wandering, GettingFood, Paused }
+public enum State { Wandering, GettingFood, Paused, Breeding }
 
 public class AgentState : MonoBehaviour
 {
-    [HideInInspector]
+    //[HideInInspector]
     public State myState;
 
     // Start is called before the first frame update

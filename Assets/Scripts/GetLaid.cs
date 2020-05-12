@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GetFood : MonoBehaviour
+public class GetLaid : MonoBehaviour
 {
     [HideInInspector]
-    public GameObject targetFood;
+    public GameObject targetMate;
     private float movementSpeed;
     private float rotSpeed;
 
@@ -25,25 +25,22 @@ public class GetFood : MonoBehaviour
     [SerializeField]
     private float EatingPauseTime = 2.0f;
 
-    private FoodManager foodManager;
+    private bool hasBred;
 
-    private bool hasEaten;
-
-    //[HideInInspector]
-    public float hunger = 0;
-    private float starve = 20;
     [HideInInspector]
-    public float eatThreshold = 5f;
+    public float hornyLevel = 0;
+    [HideInInspector]
+    public float hornyLevelBreedThreshold = 10;
 
-    private BunnyManager bunnyManager;
+    [SerializeField]
+    private GameObject bunnyPrefab;
+
+    [HideInInspector]
+    public float hornyGainMult = 1;
 
     void Start()
     {
-        bunnyManager = this.GetComponentInParent<BunnyManager>();
-
-        hasEaten = false;
-
-        foodManager = GameObject.FindObjectOfType<FoodManager>();
+        hasBred = false;
 
         myWander = this.GetComponent<Wander>();
         myAgentState = this.GetComponent<AgentState>();
@@ -57,16 +54,16 @@ public class GetFood : MonoBehaviour
 
     void Update()
     {
-        hunger += Time.deltaTime * (movementSpeed / 10);
+        hornyLevel += Time.deltaTime * hornyGainMult;
 
-        if (hunger >= starve)
+        if (targetMate == null && myAgentState.myState == State.Breeding)
         {
-            bunnyManager.Kill();
+            GoBackToWandering();
         }
 
-        if (myAgentState.myState == State.GettingFood)
+        if (myAgentState.myState == State.Breeding)
         {
-            GettingFood();
+            GettingLaid();
 
             if (dodgeTime > 0)
             {
@@ -75,24 +72,24 @@ public class GetFood : MonoBehaviour
         }
     }
 
-    private void GettingFood()
+    private void GettingLaid()
     {
-        if (Vector3.Distance(targetFood.transform.position, transform.position) <= 2.0f && !hasEaten) //keep these 2 magic numbers equal  V
+        if (Vector3.Distance(targetMate.transform.position, transform.position) <= 3.0f && !hasBred) //keep these 2 magic numbers equal  V
         {
-            hasEaten = true;
+            hasBred = true;
             Debug.Log("Target Achieved");
-            targetFood.SetActive(false);
-            StartCoroutine(Pause(EatingPauseTime, targetFood));
+            targetMate.SetActive(false);
+            StartCoroutine(Pause(EatingPauseTime, targetMate));
         }
 
         if (dodgeTime <= 0)
-            tarRot = (targetFood.transform.position - transform.position);
+            tarRot = (targetMate.transform.position - transform.position);
 
         tarRot.Normalize();
 
         AvoidObstacles(ref tarRot);
 
-        if (Vector3.Distance(targetFood.transform.position, transform.position) < 2.0f) return; //keep these 2 magic numbers equal  ^
+        if (Vector3.Distance(targetMate.transform.position, transform.position) < 3.0f) return; //keep these 2 magic numbers equal  ^
 
         curSpeed = movementSpeed * Time.deltaTime;
 
@@ -104,8 +101,9 @@ public class GetFood : MonoBehaviour
 
     void GoBackToWandering()
     {
+        hornyLevel = 0;
         myAgentState.myState = State.Wandering;
-        hasEaten = false;
+        hasBred = false;
     }
 
     public void AvoidObstacles(ref Vector3 dir)
@@ -133,13 +131,21 @@ public class GetFood : MonoBehaviour
         dodgingTime = 1 / movementSpeed;
     }
 
+    public void MadeMate()
+    {
+        myAgentState.myState = State.Breeding;
+    }
+
     IEnumerator Pause(float waitTime, GameObject food)
     {
         yield return new WaitForSeconds(waitTime);
-        //hunger -= eatThreshold;
-        hunger -= 5f;
-        Debug.Log(eatThreshold);
         GoBackToWandering();
-        foodManager.SpawnNewCarrot(food);
+
+        int rand = Random.Range(1, 3);
+
+        for (int i = 0; i <= rand; i++)
+        {
+            Instantiate(bunnyPrefab, this.transform.localPosition, Quaternion.identity);
+        }
     }
 }
